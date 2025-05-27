@@ -4,6 +4,7 @@ const app = express();
 const authRoutes = require('./routes/authRoutes');
 const agentAuthRoutes = require('./routes/agentAuthRoutes');
 const customerAuthRoutes = require('./routes/customerAuthRoutes');
+const streamRoutes = require('./services/streamService');
 // const callRoutes = require('./routes/callRoutes');
 
 
@@ -20,7 +21,7 @@ app.use('/api/agent', agentAuthRoutes);
 app.use('/api/customer', customerAuthRoutes);
 
 // Mount call routes at /api/calls (or just /calls if you want)
-// app.use('/api/calls', callRoutes);
+app.use('/api/stream', streamRoutes);
 
 // Basic health check route
 app.get('/', (req, res) => {
