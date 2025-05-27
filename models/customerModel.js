@@ -38,7 +38,7 @@ const findCustomerByUserId = async (userId) => {
 
 const getAllCustomers = async () => { 
     const result = await db.query(
-    'SELECT id, user_id, username, email, phone, created_at, updated_at FROM customers'
+    'SELECT id, user_id, username, email, phone FROM customers'
   );
   return result.rows;
 };
