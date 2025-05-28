@@ -136,6 +136,30 @@ router.get('/call-logs', async (req, res) => {
   }
 });
 
+
+// Endpoint to get all requested callers (not initiated by agents, and status is 'initiated' or 'online')
+router.get('/requested-callers', async (req, res) => {
+  try {
+    const result = await db.query(
+      `SELECT cl.id,
+      cl.caller_id,
+      u.username AS caller_username,
+      cl.call_type,
+      cl.status,
+      cl.started_at
+       FROM call_logs cl
+       JOIN users u ON cl.caller_id = u.id
+       WHERE u.is_agent = false
+         AND cl.status IN ('initiated', 'online')
+       ORDER BY cl.created_at ASC`
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Requested callers fetch error:', error);
+    res.status(500).json({ error: 'Failed to fetch requested callers' });
+  }
+});
+
 // Endpoint to get info of the caller who initiated a specific call log
 router.get('/caller-info/:callerId', async (req, res) => {
   const { callerId } = req.params;
