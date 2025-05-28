@@ -4,7 +4,7 @@ const createCallLog = async ({
   callerId,
   receiverId,
   callType,
-  streamCallId,
+  meetingCallId,
   startedAt,
   endedAt = null,
   status,
@@ -13,10 +13,10 @@ const createCallLog = async ({
 }) => {
   const result = await db.query(
     `INSERT INTO call_logs 
-      (caller_id, receiver_id, call_type, stream_call_id, started_at, ended_at, status, duration, metadata)
+      (caller_id, receiver_id, call_type, meeting_call_id, started_at, ended_at, status, duration, metadata)
      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
      RETURNING *`,
-    [callerId, receiverId, callType, streamCallId, startedAt, endedAt, status, duration, metadata]
+    [callerId, receiverId, callType, meetingCallId, startedAt, endedAt, status, duration, metadata]
   );
   return result.rows[0];
 };
