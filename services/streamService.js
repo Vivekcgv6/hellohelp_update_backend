@@ -38,12 +38,12 @@ router.post('/log-call', async (req, res) => {
     caller_id,
     receiver_id,
     call_type,
-    stream_call_id,
+    meeting_call_id,
     status,
     metadata // optional
   } = req.body;
 
-  if (!caller_id || !call_type || !stream_call_id || !status) {
+  if (!caller_id || !call_type || !status) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
 
@@ -60,7 +60,7 @@ router.post('/log-call', async (req, res) => {
       callerId: caller_id,
       receiverId: receiver_id,
       callType: call_type,
-      streamCallId: stream_call_id,
+      meetingCallId: meeting_call_id,
       startedAt: new Date(),
       status,
       metadata
@@ -76,9 +76,9 @@ router.post('/log-call', async (req, res) => {
 // Endpoint to update a call log with receiver_id and/or status using call log id
 router.patch('/log-call/:id', async (req, res) => {
   const { id } = req.params;
-  const { receiver_id, status } = req.body;
+  const { receiver_id, status, meeting_call_id } = req.body;
 
-  if (!receiver_id && !status) {
+  if (!receiver_id && !status && !meeting_call_id) {
     return res.status(400).json({ error: 'Nothing to update' });
   }
 
@@ -100,6 +100,11 @@ router.patch('/log-call/:id', async (req, res) => {
     if (status) {
       setParts.push(`status = $${idx++}`);
       values.push(status);
+    }
+
+    if (meeting_call_id) {
+      setParts.push(`meeting_call_id = $${idx++}`);
+      values.push(meeting_call_id);
     }
 
     values.push(id); // path param used here
