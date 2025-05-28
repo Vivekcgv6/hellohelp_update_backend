@@ -136,4 +136,31 @@ router.get('/call-logs', async (req, res) => {
   }
 });
 
+// Endpoint to get info of the caller who initiated a specific call log
+router.get('/caller-info/:callerId', async (req, res) => {
+  const { callerId } = req.params;
+  try {
+    const result = await db.query(
+      `SELECT cl.id,
+              cl.caller_id,
+              u.username AS caller_username,
+              cl.call_type,
+              cl.status,
+              cl.started_at
+         FROM call_logs cl
+         JOIN users u ON cl.caller_id = u.id
+        WHERE cl.caller_id = $1`,
+      [callerId]
+    );
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Call log not found' });
+    }
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error('Caller info fetch error:', error);
+    res.status(500).json({ error: 'Failed to fetch caller info' });
+  }
+});
+
+
 module.exports = router;
