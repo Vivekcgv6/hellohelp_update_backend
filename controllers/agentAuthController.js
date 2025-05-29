@@ -1,6 +1,6 @@
   const bcrypt = require('bcryptjs');
   const jwt = require('jsonwebtoken');
-  const { createAgent, findAgentByEmail, findAgentByUserId } = require('../models/agentModel');
+  const { createAgent, findAgentByEmail, findAgentByUserId, getAllAgents } = require('../models/agentModel');
   const { createUser, findUserByEmail, findUserByPhone } = require('../models/userModel');
   const { parsePhoneNumberFromString } = require('libphonenumber-js');
 
@@ -128,5 +128,20 @@
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+//get all agents function
+
+exports.getAllAgents = async (req, res) => {
+  try {
+    const agents = await getAllAgents();
+    if (!agents || agents.length === 0) {
+      return res.status(404).json({ error: 'No agents found' });
+    }
+    res.json(agents);
+  } catch (err) {
+    console.error('Error fetching agents:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 };
