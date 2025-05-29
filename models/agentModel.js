@@ -35,10 +35,17 @@ const findAgentByUserId = async (userId) => {
   return result.rows[0];
 };
 
+const getAllAgents = async () => {
+  const result = await db.query(
+    'SELECT id, user_id, username, email, phone FROM agents'
+  );
+  return result.rows;
+};
 
 module.exports = {
   createAgent,
   findAgentByEmail,
   findAgentById,
   findAgentByUserId,
+  getAllAgents
 };
