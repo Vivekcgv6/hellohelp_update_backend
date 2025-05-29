@@ -9,7 +9,6 @@ const customerAuthRoutes = require('./routes/customerAuthRoutes');
 const streamRoutes = require('./services/streamService');
 
 
-
 // Middleware to parse JSON bodies
 app.use(express.json());
 
