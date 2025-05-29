@@ -170,6 +170,7 @@ router.get('/caller-info/:callerId', async (req, res) => {
               u.username AS caller_username,
               cl.call_type,
               cl.status,
+              cl.meeting_call_id,
               cl.started_at
          FROM call_logs cl
          JOIN users u ON cl.caller_id = u.id
