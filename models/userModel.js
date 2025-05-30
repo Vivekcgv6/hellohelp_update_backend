@@ -19,7 +19,7 @@ const findUserByEmail = async (email) => {
 
 const findUserById = async (id) => {
   const result = await db.query(
-    'SELECT id, username, email, phone, is_agent FROM users WHERE id = $1',
+    'SELECT id, username, email, phone, is_agent, password FROM users WHERE id = $1',
     [id]
   );
   return result.rows[0];
@@ -29,6 +29,14 @@ const findUserByPhone = async (phone) => {
   const result = await db.query(
     'SELECT * FROM users WHERE phone = $1',
     [phone]
+  );
+  return result.rows[0];
+};
+
+const updatePassword = async (id, newPassword) => {
+  const result = await db.query(
+    'UPDATE users SET password = $1 WHERE id = $2 RETURNING *',
+    [newPassword, id]
   );
   return result.rows[0];
 };
