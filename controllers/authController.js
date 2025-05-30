@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { createUser, findUserByEmail, findUserById, findUserByPhone } = require('../models/userModel');
+const { createUser, findUserByEmail, findUserById, findUserByPhone, updatePassword } = require('../models/userModel');
 const { createAgent, findAgentByEmail } = require('../models/agentModel');
 const { findCustomerByEmail, createCustomer } = require('../models/customerModel');
 const { parsePhoneNumberFromString } = require('libphonenumber-js');
