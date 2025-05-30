@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { createUser, findUserByEmail, findUserById, findUserByPhone, updatePassword } = require('../models/userModel');
+const { createUser, findUserByEmail, findUserById, findUserByPhone, updatePassword} = require('../models/userModel');
 const { createAgent, findAgentByEmail } = require('../models/agentModel');
 const { findCustomerByEmail, createCustomer } = require('../models/customerModel');
 const { parsePhoneNumberFromString } = require('libphonenumber-js');
@@ -106,7 +106,7 @@ const { parsePhoneNumberFromString } = require('libphonenumber-js');
           is_agent: user.is_agent,
           createUser: user.createUser,
         }, 
-        process.env.JWT_SECRET, { expiresIn: '1h' });
+        process.env.JWT_SECRET, { expiresIn: '1y' });
       res.json({ message: 'Login successful',
         token,
         user: { 
@@ -140,7 +140,7 @@ const { parsePhoneNumberFromString } = require('libphonenumber-js');
     }
   }
 
-//reset_password_function
+  //reset_password_function
   exports.resetPassword = async (req, res) => {
   const userId = req.user.userId || req.user.id; // Extract userId from token (middleware must set req.user)
   const { oldPassword, newPassword } = req.body;
