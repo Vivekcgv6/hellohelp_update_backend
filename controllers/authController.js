@@ -139,3 +139,35 @@ const { parsePhoneNumberFromString } = require('libphonenumber-js');
       res.status(500).json({ error: err.message });
     }
   }
+
+//reset_password_function
+  exports.resetPassword = async (req, res) => {
+  const userId = req.user.userId || req.user.id; // Extract userId from token (middleware must set req.user)
+  const { oldPassword, newPassword } = req.body;
+
+  if (!oldPassword || !newPassword) {
+    return res.status(400).json({ error: 'Old and new passwords are required' });
+  }
+  if (newPassword.length < 6) {
+    return res.status(400).json({ error: 'New password must be at least 6 characters long' });
+  }
+  if (oldPassword === newPassword) {
+    return res.status(400).json({ error: 'New password must be different from old password' });
+  }
+
+  try {
+    const user = await findUserById(userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const valid = await bcrypt.compare(oldPassword, user.password);
+    if (!valid) return res.status(401).json({ error: 'Old password is incorrect' });
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    await updatePassword(userId, hashed); // You need to implement this in your userModel
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (err) {
+    console.error('Password reset error:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
