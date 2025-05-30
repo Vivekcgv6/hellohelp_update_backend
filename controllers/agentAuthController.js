@@ -95,7 +95,7 @@
           
 
         }, 
-        process.env.JWT_SECRET, { expiresIn: '1h' });
+        process.env.JWT_SECRET, { expiresIn: '1y' });
       res.json({ message: 'Login successful',
         token,
         agent: { 
